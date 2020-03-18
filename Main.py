@@ -1,17 +1,15 @@
-import os
 import discord
-from dotenv import load_dotenv
 
+from DiscordTokenProvider import DiscordTokenProvider
 from OnMessageHandling import find_armour_handler, OnMessageHandling
-from RunescapeWikiScraper import get_armour
-
-# Set up the discord client
-load_dotenv()
-token = os.getenv('DISCORD_TOKEN')
-client = discord.Client()
 
 # Set up the handlers
 onMessageHandling = OnMessageHandling([find_armour_handler])
+
+# TODO make singleton
+token = DiscordTokenProvider().get_token()
+
+client = discord.Client()
 
 @client.event
 async def on_ready():
@@ -28,5 +26,4 @@ async def on_message(message):
             await message.channel.send(response)
     return
 
-# Make it go!
 client.run(token)
